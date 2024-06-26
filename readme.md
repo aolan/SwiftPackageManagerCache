@@ -23,6 +23,8 @@ USAGE:     spm list
            spm add <url>
            spm remove <url>
            spm update <url>
+           spm xcode
+           spm xcode <version.app>
 
 OPTIONS:
   -h, --help              Show help information.
@@ -32,6 +34,8 @@ SUBCOMMANDS:
   add                     缓存指定的镜像仓库
   remove                  移除指定的已缓存镜像仓库
   update                  更新指定的镜像仓库
+  xcode                   查看mac电脑上安装的xcode版本列表
+  xcode-select            设置默认使用的xcode版本
 
   See 'spm help <subcommand>' for detailed help.
 ```
@@ -70,6 +74,13 @@ SUBCOMMANDS:
 
 以上命令，我们会先删除本地镜像，然后重新拉取镜像。
 
+## 查看mac电脑上安装的xcode版本
+
+`spm xcode`
+
+## 设置默认使用的xcode版本
+
+`spm xcode-select Xcode_15.4.app`
 
 
 # 二、SPM 脚本工具编写

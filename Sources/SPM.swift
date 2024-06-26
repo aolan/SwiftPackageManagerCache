@@ -1,6 +1,3 @@
-// The Swift Programming Language
-// https://docs.swift.org/swift-book
-
 import ArgumentParser
 import Foundation
 import FileKit
@@ -18,6 +15,8 @@ struct SPM: ParsableCommand {
             spm add <url>
             spm remove <url>
             spm update <url>
+            spm xcode
+            sudo spm xcode-select </Application/xcode_xx.app/Contents/Developer>
         """,
         discussion: """
         工具原理：
@@ -25,7 +24,7 @@ struct SPM: ParsableCommand {
         2、修改当前项目的 `git` 配置，在 `.git/config` 文件中，使用 `insteadOf` 将远程仓库替换成本地镜像
         3、然后在项目中执行 `swift package resolve` 和 `swift package reset` 拉取的都是本地镜像的仓库。经过测试，非常稳定，无网也可以
         """,
-        subcommands: [List.self, Add.self, Remove.self, Update.self],
+        subcommands: [List.self, Add.self, Remove.self, Update.self, Xcode.self, XcodeSelect.self],
         defaultSubcommand: SPM.self
     )
 
