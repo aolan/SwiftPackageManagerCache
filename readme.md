@@ -24,7 +24,7 @@ USAGE:     spm list
            spm remove <url>
            spm update <url>
            spm xcode
-           spm xcode <version.app>
+           spm xcode </Applications/Xcode_xxx.app/Contents/Developer>
 
 OPTIONS:
   -h, --help              Show help information.
@@ -78,9 +78,17 @@ SUBCOMMANDS:
 
 `spm xcode`
 
+通过以上命令，我们可以看到用户电脑上安装了哪些版本的Xcode，效果如下：
+
+```
+查询到的xcode版本路径如下：
+/Applications/Xcode_15.4.app/Contents/Developer(default)
+/Applications/Xcode_15.0.1.app/Contents/Developer
+```
+
 ## 设置默认使用的xcode版本
 
-`spm xcode-select Xcode_15.4.app`
+`spm xcode-select /Applications/Xcode_15.0.1.app/Contents/Developer`
 
 
 # 二、SPM 脚本工具编写
