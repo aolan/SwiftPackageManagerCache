@@ -57,7 +57,7 @@ extension SPM {
             
             // 先移除 git config 配置，否则拉不到远程仓库
             Log.info("移除 git config 配置...")
-            var command = "git config --local --unset-all url.'\(url)'.insteadOf \(repoPath)"
+            var command = "git config --global --unset-all url.'\(url)'.insteadOf \(repoPath)"
             Shell.execute(command)
             Log.success("移除完成")
 
@@ -75,7 +75,7 @@ extension SPM {
             
             // 配置 gitconfig
             Log.info("开始进行git配置...")
-            command = "git config --local url.'\(url)'.insteadOf \(repoPath)"
+            command = "git config --global url.'\(url)'.insteadOf \(repoPath)"
             Shell.execute(command)
             Log.success("配置完成")
         }

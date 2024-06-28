@@ -57,7 +57,6 @@ extension SPM {
                 Log.success("切换完成，当前采用的版本是：")
                 Log.success(Shell.execute("xcode-select --print-path").results)
             }
-            print()
         }
     }
 }
