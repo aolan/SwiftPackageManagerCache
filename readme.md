@@ -3,7 +3,9 @@
 
 1、当我们要通过 `Swift package manager` 去引入 `github` 上的一个三方库时，国内由于访问 `github` 存在稳定性问题，`swift package resolve` 和 `swift package reset` 经常会出现问题，当我们依赖的仓库较多时，就会非常浪费时间。
 
-2、 我们只需要借助 `spm` 来提高 `resolve` 和 `reset` 成功率。
+2、我们只需要借助 `spm` 来提高 `resolve` 和 `reset` 成功率。
+
+3、当然，在此之前我们要执行命令，让 xcode 使用系统的 git，即 `defaults write com.apple.dt.Xcode IDEPackageSupportUseBuiltinSCM YES`
 
 ## 配置 SPM 脚本
 
