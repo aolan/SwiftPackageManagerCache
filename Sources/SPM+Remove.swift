@@ -40,7 +40,7 @@ extension SPM {
             
             // 移除 git config 配置，相当于还原配置
             Log.info("移除 git config 配置...")
-            let command = "git config --global --unset-all url.'\(remoteURLString)'.insteadOf \(path)"
+            let command = "git config --global --unset-all url.'\(path)'.insteadOf \(remoteURLString)"
             Shell.execute(command)
             Log.success("移除完成")
         }

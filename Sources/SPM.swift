@@ -5,7 +5,7 @@ import FileKit
 @main
 struct SPM: ParsableCommand {
     /// 镜像仓库缓存路径
-    static let cacheDir: String = "\(Path.userCaches)/com.lawn.spm.tool/repos_mirror"
+    static let cacheDir: String = "\(Path.userCaches)/com.spm.tool/repos_mirror"
 
     static var configuration = CommandConfiguration(
         commandName: "spm",
