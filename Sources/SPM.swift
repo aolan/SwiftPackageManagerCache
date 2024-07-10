@@ -5,7 +5,9 @@ import FileKit
 @main
 struct SPM: ParsableCommand {
     /// 镜像仓库缓存路径
-    static let cacheDir: String = "\(Path.userCaches)/com.spm.tool/repos_mirror"
+    static let cacheDir: String = "\(Path.userCaches)/com.spm.tool/repos_mirror/"
+    /// 远程仓库前缀
+    static let remoteRepoScheme: String = "https://"
 
     static var configuration = CommandConfiguration(
         commandName: "spm",
@@ -24,7 +26,7 @@ struct SPM: ParsableCommand {
         2、修改当前项目的 `git` 配置，在 `.git/config` 文件中，使用 `insteadOf` 将远程仓库替换成本地镜像
         3、然后在项目中执行 `swift package resolve` 和 `swift package reset` 拉取的都是本地镜像的仓库。经过测试，非常稳定，无网也可以
         """,
-        subcommands: [List.self, Add.self, Remove.self, Update.self, Xcode.self, XcodeSelect.self],
+        subcommands: [List.self, Add.self, Remove.self, Update.self, Search.self, Xcode.self, XcodeSelect.self],
         defaultSubcommand: SPM.self
     )
 
@@ -33,36 +35,35 @@ struct SPM: ParsableCommand {
     }
     
     
-    /// 将 github 链接转成 URL 类型
-    /// - Parameter url: github链接
-    /// - Returns: URL类型，如果为 nil，说明外部传入的链接不合法 或 暂不支持
-    static func toRemoteURL(_ url: String) -> URL? {
-        // 链接不是以 https://github.com 开头的，暂不支持
-        if !url.hasPrefix("https://github.com") { return nil }
+    /// 验证远程仓库链接是否合法
+    /// - Parameter url: 远程仓库链接
+    /// - Returns: 是否合法
+    static func validateRemoteUrl(_ url: String) -> Bool {
+        // 链接不是以 https:// 开头的，暂不支持
+        if !url.hasPrefix(SPM.remoteRepoScheme) { return false }
         // 链接不合法，不支持
-        guard let remoteURL = URL(string: url) else { return nil }
+        guard let remoteURL = URL(string: url) else { return false }
         // 链接不是以 .git 为后缀，暂不支持
-        if remoteURL.pathExtension != "git" {
-            return nil
-        }
-        return remoteURL
+        if remoteURL.pathExtension != "git" { return false }
+        return true
     }
     
-    
-    /// 将本地镜像仓库路径转成 github 链接
+    /// 将本地镜像仓库路径转成远程仓库链接
     /// - Parameter path: 本地镜像仓库路径
-    /// - Returns: github 链接，如果为 nil，说明用户输入不合法
+    /// - Returns: 远程仓库链接，如果为 nil，说明用户输入不合法
     static func toRemoteURLString(_ path: String) -> String? {
         if !path.hasPrefix(SPM.cacheDir) {
             return nil
         }
-        let localURL = URL(fileURLWithPath: path)
-        let count = localURL.pathComponents.count
-        if count <= 2 {
-            return nil
-        }
-        guard let repoName = localURL.pathComponents.last else { return nil }
-        guard let groupName = localURL.deletingLastPathComponent().pathComponents.last else { return nil }
-        return "https://github.com/\(groupName)/\(repoName)"
+        let url = path.replacingOccurrences(of: SPM.cacheDir, with: SPM.remoteRepoScheme)
+        Log.info("remote url is: \(url)")
+        return url
+    }
+    
+    /// 将远程仓库链接映射到本地路径
+    /// - Parameter url: 远程仓库链接
+    /// - Returns: 返回本地路径
+    static func toLocalPath(_ url: String) -> String {
+        return url.replacingOccurrences(of: SPM.remoteRepoScheme, with: SPM.cacheDir)
     }
 }

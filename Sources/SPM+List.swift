@@ -17,13 +17,13 @@ extension SPM {
         
         mutating func run() throws {
             
-            let repoDirs = Path(SPM.cacheDir).find(searchDepth: 2) { path in path.pathExtension == "git" }
+            let repoDirs = Path(SPM.cacheDir).find(searchDepth: 3) { path in path.pathExtension == "git" }
             if repoDirs.count == 0 {
                 Log.success("暂未缓存任何镜像仓库")
                 return
             }
             
-            Log.info("已缓存镜像列表：")
+            Log.info("已缓存镜像列表，数量：\(repoDirs.count)")
             for repoDir in repoDirs {
                 Log.success(repoDir.rawValue)
             }
