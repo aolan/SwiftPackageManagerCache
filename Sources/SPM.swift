@@ -1,3 +1,10 @@
+//
+//  SPM.swift
+//
+//
+//  Created by lawn on 2024/6/12.
+//
+
 import ArgumentParser
 import Foundation
 import FileKit
@@ -8,25 +15,35 @@ struct SPM: ParsableCommand {
     static let cacheDir: String = "\(Path.userCaches)/com.spm.tool/repos_mirror/"
     /// 远程仓库前缀
     static let remoteRepoScheme: String = "https://"
+    /// 编译文件存放目录
+    static let buildDir: String = "\(Path.userDesktop)/spm-build/"
 
     static var configuration = CommandConfiguration(
         commandName: "spm",
         abstract: "swift package manager 镜像工具",
         usage: """
             spm list
+            spm search <repo_name>
             spm add <url>
             spm remove <url>
             spm update <url>
             spm xcode
             sudo spm xcode-select </Application/xcode_xx.app/Contents/Developer>
+            spm build -p <project> -s <scheme> -c <configuration> -e <export-options-plist-path> [-a <active-compilation-conditions>]
         """,
         discussion: """
-        工具原理：
-        1、将 `github` 远程仓库克隆一份镜像到开发者电脑中，默认存在 `~/Library/Caches/com.lawn.spm.tool/repos_mirror` 目录下
-        2、修改当前项目的 `git` 配置，在 `.git/config` 文件中，使用 `insteadOf` 将远程仓库替换成本地镜像
-        3、然后在项目中执行 `swift package resolve` 和 `swift package reset` 拉取的都是本地镜像的仓库。经过测试，非常稳定，无网也可以
+        一、SPM缓存原理：
+            1、将 github 远程仓库克隆一份镜像到开发者电脑中，默认存在 ~/Library/Caches/com.spm.tool/repos_mirror 目录下
+            2、修改当前项目的 git 配置，在 .git/config 文件中，使用 insteadOf 将远程仓库替换成本地镜像
+            3、然后在项目中执行 swift package resolve 和 swift package reset 拉取的都是本地镜像的仓库。经过测试，非常稳定，无网也可以
+        
+        二、切换 xcode 版本：
+            1、实际调用的是 xcode-select 的方法实现的
+        
+        三、编译项目：
+            涵盖 clean、archive、export 整套流程
         """,
-        subcommands: [List.self, Add.self, Remove.self, Update.self, Search.self, Xcode.self, XcodeSelect.self],
+        subcommands: [List.self, Add.self, Remove.self, Update.self, Search.self, Xcode.self, XcodeSelect.self, Build.self],
         defaultSubcommand: SPM.self
     )
 
